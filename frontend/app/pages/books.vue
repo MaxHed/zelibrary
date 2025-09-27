@@ -42,25 +42,6 @@
         <p class="text-gray-600">
           {{ bookStore.totalItems }} livre(s) trouvé(s)
         </p>
-        <div class="flex gap-2">
-          <button
-            @click="previousPage"
-            :disabled="bookStore.currentPage <= 1"
-            class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
-          >
-            Précédent
-          </button>
-          <span class="px-4 py-2">
-            Page {{ bookStore.currentPage }} sur {{ bookStore.getTotalPages }}
-          </span>
-          <button
-            @click="nextPage"
-            :disabled="bookStore.currentPage >= bookStore.getTotalPages"
-            class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
-          >
-            Suivant
-          </button>
-        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -209,24 +190,13 @@ const closeModal = () => {
   selectedBook.value = null
 }
 
-const nextPage = async () => {
-  if (bookStore.currentPage < bookStore.getTotalPages) {
-    try {
-      await bookStore.fetchBooks(bookStore.currentPage + 1)
-    } catch (error) {
-      console.error('Erreur lors du changement de page:', error)
-    }
-  }
+// Plus besoin de pagination - tous les livres sont chargés d'un coup
+const nextPage = () => {
+  // Fonction désactivée - tous les livres sont affichés
 }
 
-const previousPage = async () => {
-  if (bookStore.currentPage > 1) {
-    try {
-      await bookStore.fetchBooks(bookStore.currentPage - 1)
-    } catch (error) {
-      console.error('Erreur lors du changement de page:', error)
-    }
-  }
+const previousPage = () => {
+  // Fonction désactivée - tous les livres sont affichés
 }
 
 // Nettoyer les données au démontage

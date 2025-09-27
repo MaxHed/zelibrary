@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { useApi } from '~/composable/useApi'
 
 // Types basés sur l'entité Book du backend
 export interface Author {
@@ -30,16 +29,8 @@ export interface BookCollection {
   '@context': string
   '@id': string
   '@type': string
-  'hydra:member': Book[]
-  'hydra:totalItems': number
-  'hydra:view'?: {
-    '@id': string
-    '@type': string
-    'hydra:first'?: string
-    'hydra:last'?: string
-    'hydra:next'?: string
-    'hydra:previous'?: string
-  }
+  member: Book[]
+  totalItems: number
 }
 
 export const useBookStore = defineStore('book', () => {
@@ -60,28 +51,35 @@ export const useBookStore = defineStore('book', () => {
   const getTotalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value))
 
   // Actions
-  const fetchBooks = async (page: number = 1, search?: string) => {
+  const fetchBooks = async (search?: string) => {
     try {
       loading.value = true
       error.value = null
       
-      const api = useApi()
-      const params: Record<string, any> = {
-        page: page - 1, // API Platform utilise une pagination basée sur 0
-        'itemsPerPage': itemsPerPage.value
-      }
+      const config = useRuntimeConfig()
+      const token = useState<string | null>('token')
       
-      if (search) {
-        params.title = search
-      }
-
-      const response = await api<BookCollection>('/books', {
-        query: params
+      // Utiliser directement l'URL HTTPS
+      const response = await $fetch<BookCollection>('https://127.0.0.1:8000/api/books', {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token.value && { 'Authorization': `Bearer ${token.value}` })
+        }
       })
 
-      books.value = response['hydra:member']
-      totalItems.value = response['hydra:totalItems']
-      currentPage.value = page
+      // Gérer les deux structures possibles de l'API sans erreur de typage
+      if ('member' in response && 'totalItems' in response) {
+        books.value = response.member
+        totalItems.value = response.totalItems
+      } else if ('hydra:member' in response && 'hydra:totalItems' in response) {
+        // @ts-ignore
+        books.value = response['hydra:member']
+        // @ts-ignore
+        totalItems.value = response['hydra:totalItems']
+      } else {
+        books.value = []
+        totalItems.value = 0
+      }
 
       return response
     } catch (err: any) {
@@ -98,8 +96,15 @@ export const useBookStore = defineStore('book', () => {
       loading.value = true
       error.value = null
       
-      const api = useApi()
-      const response = await api<Book>(`/books/${id}`)
+      const config = useRuntimeConfig()
+      const token = useState<string | null>('token')
+      
+      const response = await $fetch<Book>(`https://127.0.0.1:8000/api/books/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token.value && { 'Authorization': `Bearer ${token.value}` })
+        }
+      })
       
       currentBook.value = response
       return response
@@ -112,8 +117,8 @@ export const useBookStore = defineStore('book', () => {
     }
   }
 
-  const searchBooks = async (query: string, page: number = 1) => {
-    return await fetchBooks(page, query)
+  const searchBooks = async (query: string) => {
+    return await fetchBooks(query)
   }
 
   const clearBooks = () => {
