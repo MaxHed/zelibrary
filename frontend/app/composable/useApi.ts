@@ -13,7 +13,7 @@ export const useApi = () => {
         onRequest({ options }) {
             if (token.value) {
                 // S'assurer que headers est bien un objet, puis ajouter Authorization
-                options.headers = Object.assign({}, options.headers || {}, { 'Authorization': `AUTH_TOKEN ${token.value}` });
+                options.headers = Object.assign({}, options.headers || {}, { 'Authorization': `Bearer ${token.value}` });
             }
         },
         onResponseError({ response }) {
