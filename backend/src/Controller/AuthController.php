@@ -12,7 +12,7 @@ final class AuthController
     public function logout(): JsonResponse
     {
         $resp = new JsonResponse(['message' => 'logged out']);
-        $resp->headers->clearCookie('AUTH_TOKEN', '/', null, true, true, 'lax'); // même SameSite que mis à l’auth
+        $resp->headers->clearCookie('AUTH_TOKEN', '/', null, true, true, 'none'); // aligné avec l’émission
         return $resp;
     }
 }

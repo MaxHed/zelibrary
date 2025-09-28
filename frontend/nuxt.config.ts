@@ -6,17 +6,9 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   runtimeConfig: {
     public: {
-      apiBase: '/api'
+      // URL directe du backend Symfony en HTTPS (SPA)
+      apiBase: 'https://127.0.0.1:8000/api'
     }
   },
-  nitro: {
-    devProxy: {
-      '/api': {
-        target: 'https://127.0.0.1:8000',
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '/api')
-      }
-    }
-  }
+  nitro: {}
 })

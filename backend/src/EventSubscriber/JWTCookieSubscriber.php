@@ -13,7 +13,7 @@ final class JWTCookieSubscriber implements EventSubscriberInterface
 {
     private const COOKIE_NAME = 'AUTH_TOKEN';
     private const COOKIE_PATH = '/';
-    private const COOKIE_SAMESITE = 'lax'; // 'none' si domaine différent (avec HTTPS)
+    private const COOKIE_SAMESITE = 'none'; // cross-site SPA: nécessite HTTPS
 
     public static function getSubscribedEvents(): array
     {
