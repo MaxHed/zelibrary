@@ -20,6 +20,10 @@ cd zelibrary
 ```bash
 cd backend
 composer install
+php bin/console doctrine:database:create
+php bin/console make:migration
+php bin/console doctrine:migrations:migrate
+php bin/console doctrine:fixtures:load
 ```
 
 ### Variables d’environnement
@@ -55,7 +59,7 @@ Par défaut, Nuxt démarre sur `http://localhost:3000`.
 - **Vider le cache**: `php bin/console cache:clear`
 - **Lister les routes**: `php bin/console debug:router`
 - **Créer des utilisateurs d'exemple**: `php bin/console app:create-example-users`
-- **Synchroniser les livres**: `php bin/console app:synchronize-books --pages=2 ` (2 pages pour la démonstration, sinon ça prendre beaucoup de temps)
+- **Importer les Fixtures**: `php bin/console doctrine:fixtures:load`
 
 ### Frontend
 - **Dev**: `npm run dev`

@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\LibraryRepository;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -18,6 +19,11 @@ use Symfony\Component\Serializer\Attribute\Groups;
             name: 'api_library_get_collection',
             normalizationContext: ['groups' => ['library:read']],
             uriTemplate: '/libraries',
+        ),
+        new Get(
+            name: 'api_library_get_one',
+            normalizationContext: ['groups' => ['library:read', 'library:detail']],
+            uriTemplate: '/libraries/{id}',
         )
     ]
 )]
@@ -77,6 +83,7 @@ class Library
      * @var Collection<int, Book>
      */
     #[ORM\ManyToMany(targetEntity: Book::class, inversedBy: 'libraries')]
+    #[Groups(['library:detail'])]
     private Collection $booksCollection;
 
     public function __construct()
