@@ -3,7 +3,7 @@ import { useApi } from '@/composable/useApi'
 interface Review { id: number; rate: number; review?: string }
 
 export function useReviews(bookId: number) {
-  const { apiCall } = useApi()
+  const { get, post } = useApi()
   const reviews = ref<Review[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -12,7 +12,7 @@ export function useReviews(bookId: number) {
     try {
       loading.value = true
       error.value = null
-      const res: any = await apiCall('GET', `/books/${bookId}/reviews/`)
+      const res: any = await get(`/books/${bookId}/reviews/`, {}, true)
       reviews.value = res['hydra:member'] ?? []
     } catch (e: any) {
       error.value = e?.message ?? 'Erreur de chargement'
@@ -22,7 +22,7 @@ export function useReviews(bookId: number) {
   }
 
   const createReview = async (payload: { rate: number; review?: string }) => {
-    await apiCall('POST', `/books/${bookId}/reviews`, payload)
+    await post(`/books/${bookId}/reviews`, payload, {}, true)
     await fetchReviews()
   }
 

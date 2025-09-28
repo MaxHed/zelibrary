@@ -2,8 +2,8 @@
 framework:
     secret: '%env(APP_SECRET)%'
 
-    # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    # Désactivation de la session pour éviter le cookie PHPSESSID (auth 100% stateless JWT)
+    session: false
 
     #esi: true
     #fragments: true

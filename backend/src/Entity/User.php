@@ -21,15 +21,6 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ApiResource(
-    operations: [
-        new Get(
-            uriTemplate: '/me',
-            name: 'api_me',
-            provider: MeProvider::class,               // renvoie le user connecté
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
-            normalizationContext: ['groups' => ['user:me']]   // projection pour /me
-        )
-    ],
     normalizationContext: ['groups' => ['user:read']],
     denormalizationContext: ['groups' => ['user:write']]
 )]

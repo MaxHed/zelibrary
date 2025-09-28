@@ -13,7 +13,7 @@ final class JWTCookieSubscriber implements EventSubscriberInterface
 {
     private const COOKIE_NAME = 'AUTH_TOKEN';
     private const COOKIE_PATH = '/';
-    private const COOKIE_SAMESITE = 'none'; // cross-site SPA: nécessite HTTPS
+    private const COOKIE_SAMESITE = 'none'; // valeur prod par défaut (cross-site)
 
     public static function getSubscribedEvents(): array
     {
@@ -37,14 +37,21 @@ final class JWTCookieSubscriber implements EventSubscriberInterface
         $token = $data['token'];
         $expires = time() + 3600; // aligne avec token_ttl
 
-        $cookie = Cookie::create(self::COOKIE_NAME, $token, $expires, self::COOKIE_PATH, null, true, true, false, self::COOKIE_SAMESITE);
+        // En dev: accepter HTTP (pas Secure) et SameSite=lax; en prod: Secure + SameSite=None
+        $isDev = ($_ENV['APP_ENV'] ?? getenv('APP_ENV') ?? 'prod') === 'dev';
+        $secure = $isDev ? false : true;
+        $sameSite = $isDev ? 'lax' : self::COOKIE_SAMESITE;
+
+        $cookie = Cookie::create(self::COOKIE_NAME, $token, $expires, self::COOKIE_PATH, null, $secure, true, false, $sameSite);
         // params: name, value, expire, path, domain, secure, httpOnly, raw, sameSite
 
         $response->headers->setCookie($cookie);
 
-        // Optionnel : ne pas renvoyer le token dans le body
-        unset($data['token']);
-        $event->setData($data);
+        // En prod, ne pas renvoyer le token dans le body; en dev, laisser le token pour Bearer fallback
+        if (!$isDev) {
+            unset($data['token']);
+            $event->setData($data);
+        }
     }
 
     public function onJwtInvalidOrExpired($event): void

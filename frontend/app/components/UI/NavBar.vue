@@ -28,13 +28,17 @@
 <script setup>
 import NavItem from './NavItem.vue';
 import MobileDrawer from './MobileDrawer.vue';
+import { useAuth } from '@/composable/useAuth'
 
-const items = [
+const { isAuth } = useAuth()
+
+const baseItems = [
     { to: '/', label: 'Accueil' },
     { to: '/libraries', label: 'Bibliothèques' },
     { to: '/books', label: 'Livres' },
-
 ]
+
+const items = computed(() => isAuth.value ? [...baseItems, { to: '/borrows', label: 'Mes emprunts' }] : baseItems)
 
 const isMenuOpen = ref(false)
 

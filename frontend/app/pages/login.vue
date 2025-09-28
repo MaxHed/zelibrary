@@ -43,10 +43,10 @@
         <div>
           <button
             type="submit"
-            :disabled="authStore.isLoading"
+            :disabled="loading"
             class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {{ authStore.isLoading ? 'Connexion...' : 'Se connecter' }}
+            {{ loading ? 'Connexion...' : 'Se connecter' }}
           </button>
         </div>
 
@@ -61,7 +61,8 @@
 </template>
 
 <script setup>
-const authStore = useAuthStore()
+import { useAuth } from '@/composable/useAuth'
+const { login, loading, isAuth } = useAuth()
 
 const form = reactive({
   email: '',
@@ -73,7 +74,7 @@ const error = ref('')
 const handleLogin = async () => {
   error.value = ''
   
-  const result = await authStore.login(form.email, form.password)
+  const result = await login(form.email, form.password)
   
   if (result.success) {
     // Rediriger vers la page d'accueil ou la page demandée
@@ -84,7 +85,7 @@ const handleLogin = async () => {
 }
 
 // Rediriger si déjà connecté
-if (authStore.isLoggedIn) {
+if (isAuth.value) {
   await navigateTo('/')
 }
 </script>

@@ -10,6 +10,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+// ALL USERS PASSWORD IS "password"
+
 class UserFixtures extends Fixture implements DependentFixtureInterface
 {
     private UserPasswordHasherInterface $passwordHasher;

@@ -3,7 +3,7 @@ import { useApi } from '@/composable/useApi'
 interface Category { id: number; name: string }
 
 export function useCategories() {
-  const { apiCall } = useApi()
+  const { get } = useApi()
   const categories = ref<Category[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -12,7 +12,7 @@ export function useCategories() {
     try {
       loading.value = true
       error.value = null
-      const res: any = await apiCall('GET', '/categories/')
+      const res: any = await get('/categories/', {}, true)
       categories.value = res['hydra:member'] ?? []
     } catch (e: any) {
       error.value = e?.message ?? 'Erreur de chargement'

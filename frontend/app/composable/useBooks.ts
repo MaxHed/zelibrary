@@ -2,7 +2,7 @@ import { useApi } from '@/composable/useApi'
 interface Book { id: number; title: string }
 
 export function useBooks() {
-  const { apiCall } = useApi()
+  const { get } = useApi()
   // On évite d'envoyer des en-têtes personnalisés côté client pour ne pas déclencher de preflight
 
   const books = useState("books", () => [] as Book[]);
@@ -14,9 +14,15 @@ export function useBooks() {
     try {
       loading.value = true;
       error.value = null;
-      const res = await apiCall<any>('GET', '/books/');
-      const member = res["hydra:member"] ?? res.member ?? [];
-      const total = res["hydra:totalItems"] ?? res.totalItems ?? member.length;
+      const res = await get('/books/', {}, true);
+
+      // On vérifie que res est bien un objet avant d'accéder à ses propriétés
+      if (typeof res !== 'object' || res === null) {
+        throw new Error("Réponse inattendue du serveur");
+      }
+
+      const member = (res as any)["hydra:member"] ?? (res as any).member ?? [];
+      const total = (res as any)["hydra:totalItems"] ?? (res as any).totalItems ?? member.length;
       books.value = member as Book[];
       totalItems.value = total as number;
     } catch (e: any) {

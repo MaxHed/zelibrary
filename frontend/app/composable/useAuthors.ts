@@ -3,7 +3,7 @@ import { useApi } from '@/composable/useApi'
 interface Author { id: number; name: string }
 
 export function useAuthors() {
-  const { apiCall } = useApi()
+  const { get } = useApi()
   const authors = ref<Author[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -12,7 +12,7 @@ export function useAuthors() {
     try {
       loading.value = true
       error.value = null
-      const res: any = await apiCall('GET', '/authors/')
+      const res: any = await get('/authors/', {}, true)
       authors.value = res['hydra:member'] ?? []
     } catch (e: any) {
       error.value = e?.message ?? 'Erreur de chargement'

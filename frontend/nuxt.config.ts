@@ -4,11 +4,19 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss', '@nuxt/image', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt'],
   css: ['~/assets/css/main.css'],
+  imports: {
+    // Active l'auto-import pour les composables dans app/composable/**
+    dirs: ['app/composable/**']
+  },
   runtimeConfig: {
     public: {
-      // URL directe du backend Symfony en HTTPS (SPA)
-      apiBase: 'https://127.0.0.1:8000/api'
+      // URL backend en dev HTTP (aligné sur localhost pour que SameSite=Lax fonctionne)
+      apiBase: '/api'
     }
   },
-  nitro: {}
+  nitro: {
+    devProxy: {
+      '/api/': { target: 'http://localhost:8000', changeOrigin: true }
+    }
+  },
 })

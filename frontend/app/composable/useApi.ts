@@ -1,31 +1,57 @@
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+// /composables/useApi.ts
+import { useErrorApiHandler } from './useErrorApiHandler'
 
-interface ApiOptions {
-  params?: Record<string, any>
-  headers?: Record<string, string>
-  credentials?: RequestCredentials
+const joinURL = (base: string, path: string) => {
+  const b = base.replace(/\/+$/, '')
+  const p = path.replace(/^\/+/, '')
+  return `${b}/${p}`
 }
 
 export function useApi() {
-  const {
-    public: { apiBase },
-  } = useRuntimeConfig()
+  const { error, handleError } = useErrorApiHandler()
 
-  const apiCall = async <T = any>(method: HttpMethod, endpoint: string, data?: any, options: ApiOptions = {}): Promise<T> => {
-    // Éviter les redirections HTTP->HTTPS (307) qui cassent CORS: forcer https en dev si nécessaire
-    const base = apiBase.replace(/^http:\/\//, 'https://').replace(/\/$/, '')
-    const path = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
-    const url = `${base}${path}`
-    return await $fetch<T>(url, {
-      method,
-      body: data,
-      query: options.params,
-      headers: options.headers,
-      credentials: options.credentials ?? 'include',
-    })
+  const config = useRuntimeConfig()
+  const baseURL = config.public.apiBase 
+
+  const callApi = async (
+    url: string,
+    options: any = {},
+    withCredentials = false
+  ) => {
+    try {
+      const mergedOptions = {
+        ...options,
+        credentials: withCredentials ? 'include' : 'omit',
+      }
+
+      const fullUrl = joinURL(baseURL, url)
+      const response = await $fetch(fullUrl, mergedOptions)
+      return response
+    } catch (err) {
+      handleError(err)
+      throw err
+    }
   }
 
-  return { apiCall }
+  // Helpers HTTP
+  const get = (url: string, opts: any = {}, withCredentials = false) =>
+    callApi(url, { method: 'GET', ...opts }, withCredentials)
+
+  const post = (url: string, payload?: any, opts: any = {}, withCredentials = false) =>
+    callApi(url, { method: 'POST', body: payload, ...opts }, withCredentials)
+
+  const put = (url: string, payload?: any, opts: any = {}, withCredentials = false) =>
+    callApi(url, { method: 'PUT', body: payload, ...opts }, withCredentials)
+
+  const remove = (url: string, opts: any = {}, withCredentials = false) =>
+    callApi(url, { method: 'DELETE', ...opts }, withCredentials)
+
+  return {
+    error,
+    callApi,
+    get,
+    post,
+    put,
+    remove,
+  }
 }
-
-

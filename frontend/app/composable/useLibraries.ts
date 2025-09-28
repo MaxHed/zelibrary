@@ -3,7 +3,7 @@ import { useApi } from '@/composable/useApi'
 interface Library { id: number; name: string }
 
 export function useLibraries() {
-  const { apiCall } = useApi()
+  const { get } = useApi()
   const libraries = ref<Library[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
@@ -12,7 +12,7 @@ export function useLibraries() {
     try {
       loading.value = true
       error.value = null
-      const res: any = await apiCall('GET', '/libraries/')
+      const res: any = await get('/libraries/', {}, true)
       libraries.value = res['hydra:member'] ?? res ?? []
     } catch (e: any) {
       error.value = e?.message ?? 'Erreur de chargement'
