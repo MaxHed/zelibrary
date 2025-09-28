@@ -32,9 +32,10 @@ import MobileDrawer from './MobileDrawer.vue';
 
 const items = [
     { to: '/', label: 'Accueil' },
-    { to: '/about', label: 'À propos' },
+    { to: '/libraries', label: 'Bibliothèques' },
     { to: '/contact', label: 'Contact' },
     { to: '/books', label: 'Livres' },
+
 ]
 
 const isMenuOpen = ref(false)

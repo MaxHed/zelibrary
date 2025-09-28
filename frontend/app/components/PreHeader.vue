@@ -15,6 +15,6 @@ import AuthLink from './Auth/AuthLink.vue';
 
 <style>
 .pre-header {
-    @apply h-full flex justify-end items-center bg-gray-900 ;
+    @apply h-full flex justify-end items-center bg-gray-900 h-[2.5em];
 }
 </style>

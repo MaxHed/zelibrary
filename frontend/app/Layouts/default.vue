@@ -3,8 +3,10 @@
         <PreHeader />
         <Header />
         <main class="main">
-            <div id="breadcrum"/>
-            <slot />
+            <div class="page-width h-full">
+                <div id="breadcrum"/>
+                <slot />
+            </div>
         </main>
     </div>
 </template>
@@ -14,9 +16,10 @@
 
 <style scoped>
 .layout {
-    @apply w-screen h-screen overflow-hidden grid grid-rows-[2em_5em_auto];
+    @apply w-screen h-screen flex flex-col overflow-y-auto overflow-x-hidden;
 }
 .main {
-    @apply w-full h-full overflow-y-auto py-8;
+    @apply w-full h-full  py-8;
 }
+
 </style>

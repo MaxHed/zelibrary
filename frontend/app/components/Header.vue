@@ -16,7 +16,7 @@ import NavBar from '@/components/UI/NavBar.vue';
 
 <style scoped>
 .header-container {
-    @apply w-screen max-h-full bg-[var(--color-primary)]  ;
+    @apply w-screen max-h-full bg-[var(--color-primary)] h-[5em];
 }
 .logo {
     @apply h-full;
