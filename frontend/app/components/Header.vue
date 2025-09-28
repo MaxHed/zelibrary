@@ -3,7 +3,9 @@
         <!-- <PreHeader /> -->
         <div class="h-full page-width flex justify-between items-center  ">
             <div class="flex items-center gap-4 relative h-full w-[30em] py-2">
-                <NuxtImg src="/logo.svg" alt="Logo" class="logo" />
+                <NuxtLink to="/">
+                    <NuxtImg src="/logo.svg" alt="Logo" class="logo" />
+                </NuxtLink>
             </div>
             <NavBar />
         </div>

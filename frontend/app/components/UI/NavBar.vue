@@ -33,7 +33,6 @@ import MobileDrawer from './MobileDrawer.vue';
 const items = [
     { to: '/', label: 'Accueil' },
     { to: '/libraries', label: 'Bibliothèques' },
-    { to: '/contact', label: 'Contact' },
     { to: '/books', label: 'Livres' },
 
 ]
