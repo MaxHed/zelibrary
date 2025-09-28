@@ -34,11 +34,11 @@ class Book
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['book:read'])]
+    #[Groups(['book:read', 'review:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    #[Groups(['book:read'])]
+    #[Groups(['book:read', 'review:read'])]
     private ?string $summary = null;
 
     #[ORM\Column(type: 'json', nullable: true)]
@@ -48,11 +48,11 @@ class Book
     private bool $copyright = false;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['book:read'])]
+    #[Groups(['book:read', 'review:read'])]
     private ?string $mediaType = null;
 
     #[ORM\Column(type: 'json', nullable: true)]
-    #[Groups(['book:read'])]
+    #[Groups(['book:read', 'review:read'])]
     private ?array $formats = null;
 
 
@@ -60,6 +60,7 @@ class Book
     private ?int $gutendexId = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
+    #[Groups(['book:read', 'review:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -67,12 +68,12 @@ class Book
 
     #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: 'books', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'book_author')]
-    #[Groups(['book:read'])]
+    #[Groups(['book:read', 'review:read'])]
     private Collection $authors;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'books', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'book_category')]
-    #[Groups(['book:read'])]
+    #[Groups(['book:read', 'review:read'])]
     private Collection $categories;
 
     /**

@@ -2,42 +2,63 @@
 
 namespace App\Entity;
 
-use App\Repository\LibraryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\LibraryRepository;
+use ApiPlatform\Metadata\GetCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: LibraryRepository::class)]
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            name: 'api_library_get_collection',
+            normalizationContext: ['groups' => ['library:read']],
+            uriTemplate: '/libraries',
+        )
+    ]
+)]
 class Library
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['library:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['library:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['library:read'])]
     private ?string $address = null;
 
     #[ORM\Column(length: 20, nullable: true)]
+    #[Groups(['library:read'])]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['library:read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['library:read'])]
     private ?string $logo = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['library:read'])]
     private ?string $website = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['library:read'])]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['library:read'])]
     private ?int $borrowLimit = null;
 
     /**
