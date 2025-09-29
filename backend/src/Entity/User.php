@@ -59,7 +59,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
-    #[Groups(['user:read', 'user:write', 'user:me'])]
+    #[Groups(['user:read', 'user:write', 'user:me', 'review:read', 'book:read'])]
     #[Assert\NotBlank]
     #[Assert\Email]
     private ?string $email = null;

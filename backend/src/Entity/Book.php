@@ -81,7 +81,7 @@ class Book
      * @var Collection<int, Review>
      */
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'book', orphanRemoval: true)]
-    
+    #[Groups(['book:read', 'review:read'])]
     private Collection $reviews;
 
     

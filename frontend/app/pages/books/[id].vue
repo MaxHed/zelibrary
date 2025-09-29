@@ -1,10 +1,8 @@
 <template>
-	<div>
-		<h1>Book</h1>
-	</div>
+	<BookPage :id="route.params.id as string" />
 </template>
 
-<script setup>
+<script setup lang="ts">
+import BookPage from '@/components/BookPage.vue'
 const route = useRoute()
-const book = ref(null)
 </script>
