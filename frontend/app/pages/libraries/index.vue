@@ -20,6 +20,7 @@
                 class="library-card"
                 @click="navigateToLibrary(library.id)"
             >
+            {{ library }}
                 <div class="library-header">
                     <div v-if="library.logo" class="library-logo">
                         <img :src="library.logo" :alt="library.name" />
@@ -58,20 +59,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-
-const libraries = ref([])
-const loading = ref(true)
+import { useLibraries } from '@/composable/useLibraries'
+const { fetchLibraries, libraries, loading, error } = useLibraries()
 
 const loadLibraries = async () => {
-    try {
-        const response = await $fetch('/api/libraries')
-        libraries.value = response['hydra:member'] || response
-    } catch (error) {
-        console.error('Erreur lors du chargement des bibliothèques:', error)
-    } finally {
-        loading.value = false
-    }
+    await fetchLibraries()
 }
 
 const navigateToLibrary = (id) => {

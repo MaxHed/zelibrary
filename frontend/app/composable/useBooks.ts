@@ -14,7 +14,7 @@ export function useBooks() {
     try {
       loading.value = true;
       error.value = null;
-      const res = await get('/books/', {}, true);
+      const res = await get('/books', {}, true);
 
       // On vérifie que res est bien un objet avant d'accéder à ses propriétés
       if (typeof res !== 'object' || res === null) {
