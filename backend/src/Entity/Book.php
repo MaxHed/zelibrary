@@ -43,6 +43,7 @@ class Book
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['book:read', 'books:read', 'review:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -50,7 +51,7 @@ class Book
     private ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    #[Groups(['book:read', 'review:read'])]
+    #[Groups(['book:read', 'books:read', 'review:read'])]
     private ?string $summary = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -96,7 +97,7 @@ class Book
     }
 
     //book average rate non stocker en bdd
-    #[Groups(['book:read', 'review:read'])]
+    #[Groups(['book:read', 'books:read', 'review:read'])]
     public function getAverageRate(): float
     {
         $sum = 0;
@@ -216,6 +217,7 @@ class Book
     /**
      * Méthode utilitaire pour obtenir les noms des auteurs sous forme de string
      */
+    #[Groups(['book:read', 'books:read'])]
     public function getAuthorsNames(): string
     {
         $names = [];
@@ -228,6 +230,7 @@ class Book
     /**
      * Méthode utilitaire pour obtenir les noms des catégories sous forme de string
      */
+    #[Groups(['book:read', 'books:read'])]
     public function getCategoriesNames(): string
     {
         $names = [];

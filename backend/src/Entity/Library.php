@@ -273,4 +273,10 @@ class Library
 
         return $this;
     }
+
+    #[Groups(['library:read'])]
+    public function getBooksCount(): int
+    {
+        return $this->booksCollection->count();
+    }
 }

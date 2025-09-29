@@ -20,7 +20,8 @@ const props = defineProps({
 
 const active = ref(false)
 const router = useRouter()
-onMounted(() => {
+
+watch(() => router.currentRoute.value.path, () => {
     active.value = router.currentRoute.value.path === props.to
 })
 
