@@ -2,15 +2,14 @@
 
 namespace App\Entity;
 
-use App\State\MeProvider;
+
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Delete;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\GetCollection;
+use App\Controller\User\AddBookToMyCollection;
+use ApiPlatform\Metadata\Link;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,7 +21,24 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ApiResource(
     normalizationContext: ['groups' => ['user:read']],
-    denormalizationContext: ['groups' => ['user:write']]
+    denormalizationContext: ['groups' => ['user:write']],
+    operations: [
+        new Get(
+            name: 'api_user_get_one',
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            normalizationContext: ['groups' => ['user:read']],
+            uriTemplate: '/users/{id}',
+        ),
+        
+        new Post(
+            name: 'api_user_add_book_to_my_collection',
+            uriTemplate: '/me/add-book-to-my-collection/{book}',
+            uriVariables: ['book' => new Link(fromClass: Book::class)],
+            controller: AddBookToMyCollection::class,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            read: false,
+        ),
+    ]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
