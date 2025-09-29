@@ -34,7 +34,7 @@ class Author
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['author:read', 'book:read'])]
+    #[Groups(['author:read', 'book:read' , 'books:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]

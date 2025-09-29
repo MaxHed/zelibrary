@@ -3,6 +3,9 @@ api_platform:
     version: 1.0.0
     defaults:
         stateless: true
+        pagination_items_per_page: 12
+        pagination_client_items_per_page: true
+        pagination_maximum_items_per_page: 50
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
     error_formats:

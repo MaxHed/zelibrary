@@ -10,13 +10,16 @@ use ApiPlatform\Metadata\GetCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Attribute\Groups;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 #[ApiResource(
     operations: [
         new GetCollection(
             name: 'api_book_get_collection',
-            normalizationContext: ['groups' => ['book:read']],
+            normalizationContext: ['groups' => ['books:read']],
             uriTemplate: '/books',
         ),
         new Get(
@@ -24,8 +27,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
             normalizationContext: ['groups' => ['book:read']],
             uriTemplate: '/books/{id}',
         )
-    ]
+    ],
+    paginationItemsPerPage: 12,
+    paginationClientItemsPerPage: true,
+    paginationMaximumItemsPerPage: 50,
 )]
+#[ApiFilter(SearchFilter::class, properties: [
+    'title' => 'ipartial',
+    'authors.name' => 'ipartial',
+    'categories.name' => 'ipartial',
+])]
+#[ApiFilter(OrderFilter::class, properties: ['createdAt', 'title'])]
 class Book
 {
     #[ORM\Id]
@@ -34,7 +46,7 @@ class Book
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['book:read', 'review:read'])]
+    #[Groups(['book:read', 'books:read', 'review:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
@@ -50,12 +62,12 @@ class Book
 
     #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: 'books', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'book_author')]
-    #[Groups(['book:read', 'review:read'])]
+    #[Groups(['book:read', 'review:read' , 'books:read'])]
     private Collection $authors;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'books', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'book_category')]
-    #[Groups(['book:read', 'review:read'])]
+    #[Groups(['book:read', 'review:read' , 'books:read'])]
     private Collection $categories;
 
     /**
