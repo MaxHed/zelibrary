@@ -37,11 +37,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'Les Misérables',
                 'summary' => 'Roman de Victor Hugo publié en 1862. L\'histoire se déroule en France au début du XIXe siècle et suit la vie de Jean Valjean, un ancien forçat.',
-                'languages' => ['fr'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 135,
                 'authors' => ['victor_hugo'],
                 'categories' => ['fiction', 'classique'],
                 'libraries' => ['bibliotheque_nationale_de_france', 'bibliotheque_sainte_genevieve'],
@@ -50,11 +45,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'Madame Bovary',
                 'summary' => 'Roman de Gustave Flaubert publié en 1857. L\'histoire d\'Emma Bovary, une femme mariée qui cherche à échapper à la monotonie de sa vie provinciale.',
-                'languages' => ['fr'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5141,
                 'authors' => ['gustave_flaubert'],
                 'categories' => ['fiction', 'classique'],
                 'libraries' => ['bibliotheque_nationale_de_france', 'bibliotheque_mazarine'],
@@ -63,11 +53,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'Germinal',
                 'summary' => 'Roman d\'Émile Zola publié en 1885. L\'histoire des mineurs de charbon dans le nord de la France au XIXe siècle.',
-                'languages' => ['fr'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5142,
                 'authors' => ['emile_zola'],
                 'categories' => ['fiction', 'classique'],
                 'libraries' => ['bibliotheque_sainte_genevieve'],
@@ -76,11 +61,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'À la recherche du temps perdu',
                 'summary' => 'Cycle romanesque de Marcel Proust publié entre 1913 et 1927. Une exploration de la mémoire et du temps à travers les souvenirs du narrateur.',
-                'languages' => ['fr'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5143,
                 'authors' => ['marcel_proust'],
                 'categories' => ['fiction', 'classique'],
                 'libraries' => ['bibliotheque_nationale_de_france', 'bibliotheque_sainte_genevieve', 'bibliotheque_mazarine'],
@@ -89,11 +69,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'L\'Étranger',
                 'summary' => 'Roman d\'Albert Camus publié en 1942. L\'histoire de Meursault, un homme indifférent qui commet un meurtre apparemment sans raison.',
-                'languages' => ['fr'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5144,
                 'authors' => ['albert_camus'],
                 'categories' => ['fiction', 'philosophie'],
                 'libraries' => ['bibliotheque_sainte_genevieve', 'bibliotheque_mazarine'],
@@ -102,11 +77,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'Hamlet',
                 'summary' => 'Tragédie de William Shakespeare écrite vers 1600. L\'histoire du prince Hamlet qui cherche à venger la mort de son père.',
-                'languages' => ['en'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5145,
                 'authors' => ['william_shakespeare'],
                 'categories' => ['théâtre', 'classique'],
                 'libraries' => ['bibliotheque_nationale_de_france', 'bibliotheque_sainte_genevieve'],
@@ -115,11 +85,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'Great Expectations',
                 'summary' => 'Roman de Charles Dickens publié en 1861. L\'histoire de Pip, un jeune orphelin qui rêve de devenir un gentleman.',
-                'languages' => ['en'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5146,
                 'authors' => ['charles_dickens'],
                 'categories' => ['fiction', 'classique'],
                 'libraries' => ['bibliotheque_nationale_de_france'],
@@ -128,11 +93,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'Pride and Prejudice',
                 'summary' => 'Roman de Jane Austen publié en 1813. L\'histoire d\'Elizabeth Bennet et de sa relation avec Mr. Darcy.',
-                'languages' => ['en'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5147,
                 'authors' => ['jane_austen'],
                 'categories' => ['fiction', 'romance', 'classique'],
                 'libraries' => ['bibliotheque_sainte_genevieve', 'bibliotheque_mazarine'],
@@ -141,11 +101,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'The Adventures of Tom Sawyer',
                 'summary' => 'Roman de Mark Twain publié en 1876. Les aventures d\'un jeune garçon dans le Missouri au XIXe siècle.',
-                'languages' => ['en'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5148,
                 'authors' => ['mark_twain'],
                 'categories' => ['fiction', 'jeunesse'],
                 'libraries' => ['bibliotheque_nationale_de_france'],
@@ -154,11 +109,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'The Picture of Dorian Gray',
                 'summary' => 'Roman d\'Oscar Wilde publié en 1890. L\'histoire d\'un jeune homme qui reste éternellement jeune tandis que son portrait vieillit.',
-                'languages' => ['en'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5149,
                 'authors' => ['oscar_wilde'],
                 'categories' => ['fiction', 'classique'],
                 'libraries' => ['bibliotheque_sainte_genevieve', 'bibliotheque_mazarine'],
@@ -167,11 +117,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => '1984',
                 'summary' => 'Roman dystopique de George Orwell publié en 1949. L\'histoire d\'un monde totalitaire où la liberté de pensée est supprimée.',
-                'languages' => ['en'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5150,
                 'authors' => ['george_orwell'],
                 'categories' => ['science_fiction', 'fiction'],
                 'libraries' => ['bibliotheque_nationale_de_france', 'bibliotheque_sainte_genevieve'],
@@ -180,11 +125,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'The Lord of the Rings',
                 'summary' => 'Trilogie de fantasy de J.R.R. Tolkien publiée entre 1954 et 1955. L\'épopée de Frodo Baggins et de l\'Anneau Unique.',
-                'languages' => ['en'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5151,
                 'authors' => ['j.r.r._tolkien'],
                 'categories' => ['fantasy', 'fiction'],
                 'libraries' => ['bibliotheque_nationale_de_france', 'bibliotheque_sainte_genevieve', 'bibliotheque_mazarine'],
@@ -193,11 +133,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'Murder on the Orient Express',
                 'summary' => 'Roman policier d\'Agatha Christie publié en 1934. L\'enquête d\'Hercule Poirot sur un meurtre commis dans le train.',
-                'languages' => ['en'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5152,
                 'authors' => ['agatha_christie'],
                 'categories' => ['mystère', 'policier'],
                 'libraries' => ['bibliotheque_sainte_genevieve'],
@@ -206,11 +141,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'Foundation',
                 'summary' => 'Série de science-fiction d\'Isaac Asimov publiée à partir de 1951. L\'histoire de la Fondation, une organisation qui préserve la connaissance humaine.',
-                'languages' => ['en'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5153,
                 'authors' => ['isaac_asimov'],
                 'categories' => ['science_fiction'],
                 'libraries' => ['bibliotheque_nationale_de_france', 'bibliotheque_sainte_genevieve'],
@@ -219,11 +149,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             [
                 'title' => 'Fahrenheit 451',
                 'summary' => 'Roman dystopique de Ray Bradbury publié en 1953. L\'histoire d\'un monde où les livres sont interdits et brûlés.',
-                'languages' => ['en'],
-                'copyright' => false,
-                'mediaType' => 'Text',
-                'formats' => ['text/html', 'application/epub+zip', 'text/plain'],
-                'gutendexId' => 5154,
                 'authors' => ['ray_bradbury'],
                 'categories' => ['science_fiction', 'fiction'],
                 'libraries' => ['bibliotheque_sainte_genevieve', 'bibliotheque_mazarine'],
@@ -252,11 +177,6 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
             $book = new Book();
             $book->setTitle($bookData['title']);
             $book->setSummary($bookData['summary']);
-            $book->setLanguages($bookData['languages']);
-            $book->setCopyright($bookData['copyright']);
-            $book->setMediaType($bookData['mediaType']);
-            $book->setFormats($bookData['formats']);
-            $book->setGutendexId($bookData['gutendexId']);
             $book->setCreatedAt(new \DateTimeImmutable());
             $book->setUpdatedAt(new \DateTimeImmutable());
 
