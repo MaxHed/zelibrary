@@ -31,13 +31,30 @@ class UserController
             return new JsonResponse(['error' => 'Utilisateur non authentifié'], 401);
         }
 
+        $books = [];
+        foreach ($user->getBooksCollection() as $book) {
+            $books[] = [
+                'id' => $book->getId(),
+                'title' => $book->getTitle(),
+            ];
+        }
+
+        $reviews = [];
+        foreach ($user->getReviews() as $review) {
+            $reviews[] = [
+                'id' => $review->getId(),
+                'rate' => $review->getRate(),
+                'createdAt' => $review->getCreatedAt()?->format(DATE_ATOM),
+            ];
+        }
+
         return new JsonResponse([
             'id' => $user->getId(),
             'email' => $user->getEmail(),
             'roles' => $user->getRoles(),
             'employedAt' => $user->getEmployedAt()?->getId(),
-            'booksCollection' => $user->getBooksCollection()->toArray(),
-            'reviews' => $user->getReviews()->toArray()
+            'booksCollection' => $books,
+            'reviews' => $reviews,
         ]);
     }
 
@@ -50,13 +67,11 @@ class UserController
             return new JsonResponse(['error' => 'Email et mot de passe requis'], 400);
         }
 
-        // Vérifier si l'utilisateur existe déjà
         $existingUser = $this->userRepository->findOneBy(['email' => $data['email']]);
         if ($existingUser) {
             return new JsonResponse(['error' => 'Un utilisateur avec cet email existe déjà'], 409);
         }
 
-        // Créer un nouvel utilisateur
         $user = new User();
         $user->setEmail($data['email']);
         $user->setPassword($this->passwordHasher->hashPassword($user, $data['password']));
@@ -87,7 +102,6 @@ class UserController
             return new JsonResponse(['error' => 'Aucun utilisateur trouvé avec cet email'], 404);
         }
 
-        // Mettre à jour le mot de passe
         $user->setPassword($this->passwordHasher->hashPassword($user, $data['newPassword']));
         $this->entityManager->flush();
 

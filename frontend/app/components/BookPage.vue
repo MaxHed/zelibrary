@@ -58,7 +58,6 @@ async function fetchBook() {
     error.value = null
     const res: any = await get(`/books/${props.id}`, {}, true)
     book.value = res
-    navigateTo(`/books/${book.value.id}`)
   } catch (e: any) {
     error.value = e?.message ?? 'Erreur de chargement'
   }

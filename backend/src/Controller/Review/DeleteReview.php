@@ -1,19 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller\Review;
 
-use App\Entity\Book;
 use App\Entity\User;
 use App\Entity\Review;
-use App\ApiResource\CreateReviewInput;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 #[AsController]
@@ -34,9 +29,7 @@ final class DeleteReview
 
         $this->entityManager->flush();
 
-        return new JsonResponse([
-            'message' => 'Review deleted',
-        ], Response::HTTP_CREATED);
+        return new Response(null, Response::HTTP_NO_CONTENT);
     }
 }
 
