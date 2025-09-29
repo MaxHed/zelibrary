@@ -28,8 +28,10 @@
 <script setup>
 import NavItem from '../UI/NavItem.vue'
 import { useAuth } from '@/composable/useAuth'
+import { useApi } from '@/composable/useApi'
 
 const { isAuth, user, logout } = useAuth()
+const { get } = useApi()
 const open = ref(false)
 const toggle = () => { open.value = !open.value }
 const handleLogout = async () => {
@@ -37,5 +39,22 @@ const handleLogout = async () => {
   open.value = false
   await navigateTo('/')
 }
+
+onMounted(async () => {
+  // Assurer la restauration même si le plugin n'a pas fini
+  if (!isAuth.value) {
+    try {
+      const me = await get('/me', {}, true)
+      if (me) {
+        isAuth.value = true
+        user.value = me
+        localStorage.setItem('isAuth', '1')
+        localStorage.setItem('user', JSON.stringify(me))
+      }
+    } catch {
+      // non connecté côté serveur, ignorer
+    }
+  }
+})
 </script>
 

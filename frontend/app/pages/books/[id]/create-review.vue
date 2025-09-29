@@ -61,7 +61,7 @@ const onSubmit = async () => {
 		await post(`/reviews/books/${bookId}`, { rate: rate.value, review: review.value }, {}, true)
 		success.value = true
 		// Optionnel: rediriger vers la page du livre après succès
-		// await navigateTo(`/books/${bookId}`)
+		await navigateTo(`/books/${bookId}`)
 	} catch (e: any) {
 		error.value = e?.data?.message || e?.message || 'Impossible de publier les avis'
 	} finally {

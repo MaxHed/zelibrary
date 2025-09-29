@@ -4,56 +4,30 @@
         <section class="hero">
             <h1>ZeLibrary</h1>
             <p>Votre bibliothèque numérique personnelle</p>
-            <button class="btn-primary">Commencer à explorer</button>
+            <NuxtLink to="/books" class="btn-primary">Commencer à explorer</NuxtLink>
         </section>
 
-        <!-- Stats Section -->
-        <section class="stats">
-            <div class="stat">
-                <h3>{{ stats.booksCount || 0 }}</h3>
-                <p>Livres disponibles</p>
-            </div>
-            <div class="stat">
-                <h3>{{ stats.usersCount || 0 }}</h3>
-                <p>Utilisateurs actifs</p>
-            </div>
-            <div class="stat">
-                <h3>{{ stats.librariesCount || 0 }}</h3>
-                <p>Bibliothèques partenaires</p>
-            </div>
-        </section>
 
         <!-- Recent Books -->
         <section class="recent-books">
             <h2>Derniers livres ajoutés</h2>
             <div class="books-grid" v-if="recentBooks.length > 0">
-                <div v-for="book in recentBooks" :key="book.id" class="book-card">
+                <NuxtLink v-for="book in recentBooks" :key="book.id" class="book-card" :to="`/books/${book.id}`">
                     <h4>{{ book.title }}</h4>
-                    <p>{{ book.authorsNames }}</p>
-                </div>
+                    <p class="text-sm opacity-80" v-if="book.authorsNames">{{ book.authorsNames }}</p>
+                </NuxtLink>
             </div>
             <p v-else>Chargement des livres...</p>
         </section>
 
-        <!-- Recent Reviews -->
-        <section class="recent-reviews">
-            <h2>Avis récents</h2>
-            <div class="reviews-list" v-if="recentReviews.length > 0">
-                <div v-for="review in recentReviews" :key="review.id" class="review-card">
-                    <div class="review-header">
-                        <h4>{{ review.book.title }}</h4>
-                        <div class="rating">{{ '★'.repeat(review.rate) }}</div>
-                    </div>
-                    <p>{{ review.review }}</p>
-                </div>
-            </div>
-            <p v-else>Chargement des avis...</p>
-        </section>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useApi } from '@/composable/useApi'
+
+const { get } = useApi()
 
 const stats = ref({
     booksCount: 0,
@@ -62,13 +36,39 @@ const stats = ref({
 })
 
 const recentBooks = ref([])
-const recentReviews = ref([])
+const loading = ref(true)
+const error = ref(null)
+
+function extractMemberTotal(res) {
+    const member = res && (res['hydra:member'] || res.member) ? (res['hydra:member'] || res.member) : []
+    const total = res && (res['hydra:totalItems'] || res.totalItems) ? (res['hydra:totalItems'] || res.totalItems) : member.length
+    return { member, total: Number(total) || 0 }
+}
+
+async function loadStats() {
+    const [booksRes, usersRes, librariesRes] = await Promise.all([
+        get('/books?itemsPerPage=1')
+    ])
+    stats.value.booksCount = extractMemberTotal(booksRes).total
+    stats.value.usersCount = extractMemberTotal(usersRes).total
+    stats.value.librariesCount = extractMemberTotal(librariesRes).total
+}
+
+async function loadRecentBooks() {
+    const res = await get('/books', { params: { 'order[createdAt]': 'desc', itemsPerPage: 6 } })
+    recentBooks.value = extractMemberTotal(res).member
+}
+
 
 onMounted(async () => {
-    // TODO: Appeler les APIs pour récupérer les données
-    // await loadStats()
-    // await loadRecentBooks()
-    // await loadRecentReviews()
+    try {
+        loading.value = true
+        await Promise.all([loadStats(), loadRecentBooks(), loadRecentReviews()])
+    } catch (e) {
+        error.value = e && e.message ? e.message : 'Erreur de chargement'
+    } finally {
+        loading.value = false
+    }
 })
 </script>
 
