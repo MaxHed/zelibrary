@@ -47,12 +47,7 @@ final class CreateReview
         $this->entityManager->flush();
 
         return new JsonResponse([
-            'id' => $review->getId(),
-            'book' => $book->getId(),
-            'user' => $user->getId(),
-            'review' => $review->getReview(),
-            'rate' => $review->getRate(),
-            'createdAt' => $review->getCreatedAt()?->format(DATE_ATOM),
+            'message' => 'Review created',
         ], Response::HTTP_CREATED);
     }
 }

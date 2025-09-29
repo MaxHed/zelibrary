@@ -41,24 +41,6 @@ class Book
     #[Groups(['book:read', 'review:read'])]
     private ?string $summary = null;
 
-    #[ORM\Column(type: 'json', nullable: true)]
-    private ?array $languages = null;
-
-    #[ORM\Column(type: 'boolean')]
-    private bool $copyright = false;
-
-    #[ORM\Column(length: 50)]
-    #[Groups(['book:read', 'review:read'])]
-    private ?string $mediaType = null;
-
-    #[ORM\Column(type: 'json', nullable: true)]
-    #[Groups(['book:read', 'review:read'])]
-    private ?array $formats = null;
-
-
-    #[ORM\Column(type: 'integer', unique: true)]
-    private ?int $gutendexId = null;
-
     #[ORM\Column(type: 'datetime_immutable')]
     #[Groups(['book:read', 'review:read'])]
     private ?\DateTimeImmutable $createdAt = null;
@@ -86,9 +68,11 @@ class Book
      * @var Collection<int, Review>
      */
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'book', orphanRemoval: true)]
+    
     private Collection $reviews;
 
-
+    
+    
     public function __construct()
     {
         $this->authors = new ArrayCollection();
@@ -97,6 +81,19 @@ class Book
         $this->updatedAt = new \DateTimeImmutable();
         $this->libraries = new ArrayCollection();
         $this->reviews = new ArrayCollection();
+    }
+
+    //book average rate non stocker en bdd
+    #[Groups(['book:read', 'review:read'])]
+    public function getAverageRate(): float
+    {
+        $sum = 0;
+        $count = 0;
+        foreach ($this->reviews as $review) {
+            $sum += $review->getRate();
+            $count++;
+        }
+        return $count > 0 ? $sum / $count : 0;
     }
 
     public function getId(): ?int
@@ -130,71 +127,7 @@ class Book
         return $this;
     }
 
-    public function getLanguages(): ?array
-    {
-        return $this->languages;
-    }
-
-    public function setLanguages(?array $languages): static
-    {
-        $this->languages = $languages;
-        $this->updatedAt = new \DateTimeImmutable();
-
-        return $this;
-    }
-
-    public function isCopyright(): bool
-    {
-        return $this->copyright;
-    }
-
-    public function setCopyright(bool $copyright): static
-    {
-        $this->copyright = $copyright;
-        $this->updatedAt = new \DateTimeImmutable();
-
-        return $this;
-    }
-
-    public function getMediaType(): ?string
-    {
-        return $this->mediaType;
-    }
-
-    public function setMediaType(string $mediaType): static
-    {
-        $this->mediaType = $mediaType;
-        $this->updatedAt = new \DateTimeImmutable();
-
-        return $this;
-    }
-
-    public function getFormats(): ?array
-    {
-        return $this->formats;
-    }
-
-    public function setFormats(?array $formats): static
-    {
-        $this->formats = $formats;
-        $this->updatedAt = new \DateTimeImmutable();
-
-        return $this;
-    }
-
-
-    public function getGutendexId(): ?int
-    {
-        return $this->gutendexId;
-    }
-
-    public function setGutendexId(int $gutendexId): static
-    {
-        $this->gutendexId = $gutendexId;
-        $this->updatedAt = new \DateTimeImmutable();
-
-        return $this;
-    }
+    
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
