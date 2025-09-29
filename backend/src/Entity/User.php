@@ -4,14 +4,16 @@ namespace App\Entity;
 
 
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Delete;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use ApiPlatform\Metadata\ApiResource;
-use App\Controller\User\AddBookToMyCollection;
-use ApiPlatform\Metadata\Link;
 use Doctrine\Common\Collections\Collection;
+use App\Controller\User\AddBookToMyCollection;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Controller\User\DeleteBookFromMyCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -37,6 +39,14 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
             controller: AddBookToMyCollection::class,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             read: false,
+        ),
+
+        new Delete(
+            name: 'api_user_delete_book_from_my_collection',
+            uriTemplate: '/me/delete-book-from-my-collection/{book}',
+            uriVariables: ['book' => new Link(fromClass: Book::class)],
+            controller: DeleteBookFromMyCollection::class,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
         ),
     ]
 )]
