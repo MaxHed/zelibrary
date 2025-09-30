@@ -109,21 +109,13 @@ class Book
     #[Groups(['book:read', 'review:read' , 'books:read', 'book-collection:read'])]
     private Collection $categories;
 
-    /**
-     * @var Collection<int, Library>
-     */
     #[ORM\ManyToMany(targetEntity: Library::class, mappedBy: 'booksCollection')]
     private Collection $libraries;
 
-    /**
-     * @var Collection<int, Review>
-     */
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'book', orphanRemoval: true)]
     #[Groups(['book:read', 'review:read'])]
     private Collection $reviews;
 
-    
-    
     public function __construct()
     {
         $this->authors = new ArrayCollection();
@@ -134,7 +126,9 @@ class Book
         $this->reviews = new ArrayCollection();
     }
 
-    //book average rate non stocker en bdd
+    /**
+     * Note: moyenne des notes calculée à la volée (non stockée en BDD).
+     */
     #[Groups(['book:read', 'books:read', 'review:read'])]
     public function getAverageRate(): float
     {
@@ -178,8 +172,6 @@ class Book
         return $this;
     }
 
-    
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
@@ -204,9 +196,6 @@ class Book
         return $this;
     }
 
-    /**
-     * @return Collection<int, Author>
-     */
     public function getAuthors(): Collection
     {
         return $this->authors;
@@ -228,9 +217,6 @@ class Book
         return $this;
     }
 
-    /**
-     * @return Collection<int, Category>
-     */
     public function getCategories(): Collection
     {
         return $this->categories;
@@ -278,9 +264,6 @@ class Book
         return implode(', ', $names);
     }
 
-    /**
-     * @return Collection<int, Library>
-     */
     public function getLibraries(): Collection
     {
         return $this->libraries;
@@ -305,9 +288,6 @@ class Book
         return $this;
     }
 
-    /**
-     * @return Collection<int, Review>
-     */
     public function getReviews(): Collection
     {
         return $this->reviews;
@@ -334,6 +314,4 @@ class Book
 
         return $this;
     }
-
-
 }
