@@ -6,12 +6,14 @@ export const useAuth = () => {
   const user = useState<any | null>('user', () => null)
   const loading = useState('authLoading', () => false)
 
+  // Restaure l'état client (sans appel réseau), utile au boot côté client
   const restore = () => {
     if (typeof window === 'undefined') return
     isAuth.value = localStorage.getItem('isAuth') === '1'
     user.value = JSON.parse(localStorage.getItem('user') || 'null')
   }
 
+  // Authentifie via /login_check, puis récupère /me (cookie JWT HttpOnly)
   const login = async (email: string, password: string) => {
     loading.value = true
     try {
@@ -29,6 +31,7 @@ export const useAuth = () => {
     }
   }
 
+  // Déconnexion côté serveur + nettoyage côté client
   const logout = async () => {
     try {
       await post('/logout', {}, {}, true)

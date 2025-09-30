@@ -21,7 +21,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         localStorage.setItem('user', JSON.stringify(me))
       }
     } catch {
-      // ignorer: pas connecté côté serveur
+      // Ignorer: pas connecté côté serveur
     }
   }
 })

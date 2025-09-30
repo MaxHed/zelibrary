@@ -1,4 +1,4 @@
-// /composables/useApi.ts
+// Client HTTP minimal basé sur $fetch, avec gestion d'erreur centralisée
 import { useErrorApiHandler } from './useErrorApiHandler'
 
 const joinURL = (base: string, path: string) => {
@@ -11,7 +11,7 @@ export function useApi() {
   const { error, handleError } = useErrorApiHandler()
 
   const config = useRuntimeConfig()
-  const baseURL = config.public.apiBase 
+  const baseURL = config.public.apiBase
 
   const callApi = async (
     url: string,
