@@ -13,6 +13,7 @@ export const useAuthStore = defineStore('auth', {
   },
   
   actions: {
+    // État local
     setToken(token: string | null) {
       this.token = token
     },
@@ -25,6 +26,7 @@ export const useAuthStore = defineStore('auth', {
       this.isLoading = loading
     },
     
+    // Flux de connexion côté client (Bearer)
     async login(email: string, password: string) {
       this.setLoading(true)
       try {
@@ -63,6 +65,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     
+    // Déconnexion + nettoyage local
     async logout() {
       try {
         const { $fetch } = useNuxtApp()
@@ -90,6 +93,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     
+    // Récupération des infos utilisateur courantes
     async fetchUser() {
       if (!this.token) return null
       
@@ -119,6 +123,7 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     
+    // Boot du store
     async initialize() {
       // Vérifier s'il y a un token en localStorage
       if (this.token) {

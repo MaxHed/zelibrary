@@ -51,7 +51,7 @@ onMounted(async () => {
         localStorage.setItem('user', JSON.stringify(me))
       }
     } catch {
-      // non connecté côté serveur, ignorer
+      // Non connecté côté serveur (JWT absent/expiré) — ignorer
     }
   }
 })
