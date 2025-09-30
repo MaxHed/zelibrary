@@ -6,6 +6,7 @@ Monorepo contenant un backend Symfony et un frontend Nuxt. Ce guide couvre l’i
 - **PHP** ≥ 8.2 avec **Composer**
 - **Symfony CLI** (recommandé pour le serveur local)
 - **Node.js** ≥ 18 et **npm**
+- **OpenSSL** pour générer les clés JWT
 
 ### Cloner le dépôt
 ```bash
@@ -22,6 +23,9 @@ composer install
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 php bin/console doctrine:fixtures:load
+
+# Générer les clés JWT
+php bin/console lexik:jwt:generate-keypair --overwrite
 ```
 
 ### Variables d’environnement
