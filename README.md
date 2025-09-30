@@ -31,8 +31,11 @@ cp .env .env.local
 ```
 
 ### Lancer le serveur de développement
+Lancer le serveur de développement en utilisant le port 8000
+L'option --no-tls est utilisée pour éviter les problèmes de certificats SSL. (sinon le frontend ne peut pas accéder au backend)
+
 ```bash
-symfony serve
+symfony serve --no-tls -p 8000
 ```
 Astuce: ajoutez `-d` pour lancer en arrière-plan, et `--no-tls` si vous ne souhaitez pas le HTTPS local.
 
