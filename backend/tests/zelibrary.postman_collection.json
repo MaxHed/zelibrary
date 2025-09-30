@@ -33,7 +33,20 @@
 					"name": "GET_ONE_Book",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/books/220",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"books",
+								"220"
+							]
+						}
 					},
 					"response": []
 				}
@@ -76,48 +89,74 @@
 			"name": "User",
 			"item": [
 				{
-					"name": "ADD_Book-to-my-library",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8000/api/me/add-book-to-my-collection/220",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"me",
-								"add-book-to-my-collection",
-								"220"
-							]
+					"name": "Book Collction",
+					"item": [
+						{
+							"name": "ADD_Book-to-my-library",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/api/me/add-book-to-my-collection/220",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"me",
+										"add-book-to-my-collection",
+										"220"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE_Book-from-my-library Copy",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/api/me/delete-book-from-my-collection/220",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"me",
+										"delete-book-from-my-collection",
+										"220"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET_My-books-collection",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/api/me/books-collection",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"me",
+										"books-collection"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "DELETE_Book-from-my-library Copy",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8000/api/me/delete-book-from-my-collection/220",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"me",
-								"delete-book-from-my-collection",
-								"220"
-							]
-						}
-					},
-					"response": []
+					]
 				},
 				{
 					"name": "GET_me",
@@ -162,7 +201,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"review\": \"Super livre, très clair et prenant.\",\r\n  \"rate\": 2\r\n}",
+							"raw": "{\r\n  \"review\": \"Super livre, très clair et prenant.\",\r\n  \"rate\": 4\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -170,7 +209,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8000/api/books/232/reviews",
+							"raw": "http://localhost:8000/api/reviews/books/233",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -178,19 +217,47 @@
 							"port": "8000",
 							"path": [
 								"api",
+								"reviews",
 								"books",
-								"232",
-								"reviews"
+								"233"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "DELETE_Reviews",
 					"request": {
-						"method": "GET",
-						"header": []
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/ld+json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/ld+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"review\": \"Super livre, très clair et prenant.\",\r\n  \"rate\": 2\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/reviews/32",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"reviews",
+								"32"
+							]
+						}
 					},
 					"response": []
 				}

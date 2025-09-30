@@ -184,3 +184,214 @@ Nom de l'entité : Review
 
 ---
 
+
+## 4. État actuel du projet (backend + frontend) Le 30/09/2025 à 19:09
+
+### 4.1 Backend (Symfony 7 + API Platform)
+- Authentification via JWT (LexikJWT) avec cookies HTTP-only; le frontend appelle l’API avec `credentials: include`.
+- Sérialisation/normalisation par groupes (`book:read`, `books:read`, `review:read`, `book-collection:read`, etc.).
+- Entités persistées: `User`, `Book`, `Author`, `Category`, `Library`, `Review`.
+- Relations:
+  - `User` 1—n `Review`
+  - `Book` 1—n `Review`
+  - `User` n—n `Book` (collection personnelle via table de jointure)
+  - `Book` n—n `Author`
+  - `Book` n—n `Category`
+  - `Library` 1—n `User` (employés)
+  - `Library` n—n `Book`
+
+#### Endpoints exposés (principaux)
+- Livres
+  - GET `/books` (liste)
+  - GET `/books/{id}` (détail)
+  - GET `/me/books-collection` (liste des livres de l’utilisateur courant) [auth]
+  - POST `/me/add-book-to-my-collection/{book}` [auth]
+  - DELETE `/me/delete-book-from-my-collection/{book}` [auth]
+  - GET `/me/is-book-in-my-collection/{book}` [auth]
+- Auteurs
+  - GET `/authors`, GET `/authors/{id}`
+- Catégories
+  - GET `/categories`, GET `/categories/{id}`
+- Bibliothèques
+  - GET `/libraries`, GET `/libraries/{id}`
+- Reviews
+  - GET `/reviews`
+  - POST `/reviews/books/{id}` (création d’un avis pour un livre) [auth]
+  - DELETE `/reviews/{review}` [auth]
+- Utilisateur
+  - GET `/users/{id}` [auth]
+
+### 4.2 Frontend (Nuxt 4.1 + TypeScript + Tailwind)
+- Pages principales:
+  - `pages/books/index.vue`: liste des livres (recherche et pagination via `ResourceCollection`).
+  - `pages/books/[id]/index.vue` + `components/BookPage.vue`: détail d’un livre, reviews, bouton “Ajouter à ma collection” (masqué si déjà présent), lien “Ajouter un avis” pour les utilisateurs connectés.
+  - `pages/collection.vue`: liste de la collection personnelle; suppression avec modal de confirmation et rafraîchissement sans rechargement.
+  - `pages/login.vue`: authentification.
+- Composants et composables clés:
+  - `components/ResourceCollection.vue`: composant générique de liste avec recherche, pagination, gestion du chargement/erreur.
+  - `composable/useApi.ts`: wrapper `$fetch` avec baseURL et `withCredentials` configurable.
+  - `composable/useAuth.ts`: état d’auth (ex. `isAuth`).
+
+---
+
+## 5. Entités (modèle actuel)
+
+### 5.1 User
+- `id: int`
+- `email: string`
+- `password: string`
+- `roles: string[]`
+- `employedAt: ?Library` (ManyToOne)
+- `booksCollection: Book[]` (ManyToMany)
+- `reviews: Review[]` (OneToMany)
+
+### 5.2 Book
+- `id: int`
+- `title: string`
+- `summary?: text`
+- `createdAt: datetime`
+- `updatedAt: datetime`
+- `authors: Author[]` (ManyToMany)
+- `categories: Category[]` (ManyToMany)
+- `libraries: Library[]` (ManyToMany)
+- `reviews: Review[]` (OneToMany)
+- Calculé: `averageRate: float`
+
+### 5.3 Author
+- `id: int`
+- `name: string`
+- `birthYear?: int`
+- `deathYear?: int`
+- `createdAt: datetime`
+- `updatedAt: datetime`
+- `books: Book[]` (ManyToMany)
+
+### 5.4 Category
+- `id: int`
+- `name: string`
+- `type?: string` (ex. `subject`, `bookshelf`)
+- `createdAt: datetime`
+- `updatedAt: datetime`
+- `books: Book[]` (ManyToMany)
+
+### 5.5 Library
+- `id: int`
+- `name: string`
+- `address: string`
+- `phone?: string`
+- `email?: string`
+- `logo?: string`
+- `website?: string`
+- `description?: text`
+- `borrowLimit?: int`
+- `createdAt: datetime`
+- `updatedAt: datetime`
+- `employees: User[]` (OneToMany)
+- `booksCollection: Book[]` (ManyToMany)
+
+### 5.6 Review
+- `id: int`
+- `book: Book` (ManyToOne)
+- `user: User` (ManyToOne)
+- `review: text`
+- `rate: int` (1..5)
+- `createdAt: datetime`
+
+---
+
+## 6. Schéma ER (Mermaid) — entités et tables de jointure
+
+```mermaid
+erDiagram
+  USER ||--o{ REVIEW : writes
+  BOOK ||--o{ REVIEW : has
+
+  USER ||--o{ USER_BOOK : owns
+  BOOK ||--o{ USER_BOOK : in
+
+  BOOK ||--o{ BOOK_AUTHOR : has
+  AUTHOR ||--o{ BOOK_AUTHOR : of
+
+  BOOK ||--o{ BOOK_CATEGORY : has
+  CATEGORY ||--o{ BOOK_CATEGORY : of
+
+  LIBRARY ||--o{ USER : employs
+  LIBRARY ||--o{ LIBRARY_BOOK : has
+  BOOK ||--o{ LIBRARY_BOOK : in
+
+  USER {
+    int id PK
+    string email
+    string password
+    string roles[]
+    int employed_at FK
+  }
+
+  BOOK {
+    int id PK
+    string title
+    text summary
+    datetime created_at
+    datetime updated_at
+  }
+
+  AUTHOR {
+    int id PK
+    string name
+    int birth_year
+    int death_year
+    datetime created_at
+    datetime updated_at
+  }
+
+  CATEGORY {
+    int id PK
+    string name
+    string type
+    datetime created_at
+    datetime updated_at
+  }
+
+  LIBRARY {
+    int id PK
+    string name
+    string address
+    string phone
+    string email
+    string logo
+    string website
+    text description
+    int borrow_limit
+    datetime created_at
+    datetime updated_at
+  }
+
+  REVIEW {
+    int id PK
+    int book_id FK
+    int user_id FK
+    text review
+    int rate
+    datetime created_at
+  }
+
+  USER_BOOK {
+    int user_id FK
+    int book_id FK
+  }
+
+  BOOK_AUTHOR {
+    int book_id FK
+    int author_id FK
+  }
+
+  BOOK_CATEGORY {
+    int book_id FK
+    int category_id FK
+  }
+
+  LIBRARY_BOOK {
+    int library_id FK
+    int book_id FK
+  }
+```

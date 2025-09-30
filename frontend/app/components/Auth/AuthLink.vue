@@ -6,7 +6,7 @@
       size="sm"
     />
     <NavItem
-      to="/register"
+      to="#"
       label="S'inscrire"
       size="xs"
     />
