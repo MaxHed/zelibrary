@@ -13,6 +13,14 @@
         Note moyenne: {{ (Number(book.averageRate) || 0).toFixed(1) }} / 5
       </div>
       <p v-if="book.summary" class="text-base">{{ book.summary }}</p>
+      <!-- CTA ajouter à la collection -->
+      <div class="mt-2 flex items-center gap-2" v-if="isAuth && !inCollection">
+        <button class="px-3 py-2 rounded bg-[var(--color-primary)] text-white disabled:opacity-60" :disabled="adding" @click="addToCollection">
+          <span v-if="!adding">Ajouter à ma collection</span>
+          <span v-else>Ajout...</span>
+        </button>
+        <span v-if="feedback" class="text-sm" :class="{ 'text-green-700': feedbackType==='success', 'text-red-700': feedbackType==='error' }">{{ feedback }}</span>
+      </div>
     </div>
     <!-- reviews -->
     <div class="flex flex-col gap-4 mt-4 border-t pt-4">
@@ -48,10 +56,14 @@ import { useAuth } from '@/composable/useAuth'
 const { isAuth } = useAuth()
 
 const props = defineProps<{ id: string | number }>()
-const { get } = useApi()
+const { get, post } = useApi()
 
 const book = ref<any | null>(null)
 const error = ref<string | null>(null)
+const adding = ref<boolean>(false)
+const feedback = ref<string>('')
+const feedbackType = ref<'success' | 'error' | ''>('')
+const inCollection = ref<boolean>(false)
 
 async function fetchBook() {
   try {
@@ -63,7 +75,38 @@ async function fetchBook() {
   }
 }
 
-onMounted(fetchBook)
+onMounted(async () => {
+  await fetchBook()
+  await checkInCollection()
+})
+
+async function checkInCollection() {
+  if (!book.value?.id) return
+  try {
+    const res: any = await get(`/me/is-book-in-my-collection/${book.value.id}`, {}, true)
+    inCollection.value = Boolean(res?.inCollection)
+  } catch (e) {
+    // silencieux si non authentifié ou autre
+  }
+}
+
+async function addToCollection() {
+  if (!book.value?.id) return
+  try {
+    adding.value = true
+    feedback.value = ''
+    feedbackType.value = ''
+    await post(`/me/add-book-to-my-collection/${book.value.id}`, undefined, {}, true)
+    feedback.value = 'Ajouté à votre collection'
+    feedbackType.value = 'success'
+    inCollection.value = true
+  } catch (e: any) {
+    feedback.value = e?.message ?? "Impossible d'ajouter à la collection"
+    feedbackType.value = 'error'
+  } finally {
+    adding.value = false
+  }
+}
 </script>
 
 <style scoped>
