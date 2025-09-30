@@ -51,7 +51,7 @@
         </div>
 
         <div class="text-center">
-          <NuxtLink to="/register" class="text-indigo-600 hover:text-indigo-500">
+          <NuxtLink to="#" class="text-indigo-600 hover:text-indigo-500">
             Pas encore de compte ? S'inscrire
           </NuxtLink>
         </div>

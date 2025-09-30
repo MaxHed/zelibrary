@@ -4,16 +4,11 @@ namespace App\Entity;
 
 
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Link;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Delete;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\Collection;
-use App\Controller\User\AddBookToMyCollection;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Controller\User\DeleteBookFromMyCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,24 +25,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             normalizationContext: ['groups' => ['user:read']],
             uriTemplate: '/users/{id}',
-        ),
-        
-        new Post(
-            name: 'api_user_add_book_to_my_collection',
-            uriTemplate: '/me/add-book-to-my-collection/{book}',
-            uriVariables: ['book' => new Link(fromClass: Book::class)],
-            controller: AddBookToMyCollection::class,
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
-            read: false,
-        ),
-
-        new Delete(
-            name: 'api_user_delete_book_from_my_collection',
-            uriTemplate: '/me/delete-book-from-my-collection/{book}',
-            uriVariables: ['book' => new Link(fromClass: Book::class)],
-            controller: DeleteBookFromMyCollection::class,
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
-        ),
+        )
     ]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -88,7 +66,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Book>
      */
     #[ORM\ManyToMany(targetEntity: Book::class)]
-    #[Groups(['user:read', 'user:me'])]
+    #[Groups(['user:read', 'user:me', 'book-collection:read'])]
     private Collection $booksCollection;
 
     /**

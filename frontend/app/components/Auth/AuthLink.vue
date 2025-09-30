@@ -41,7 +41,6 @@ const handleLogout = async () => {
 }
 
 onMounted(async () => {
-  // Assurer la restauration même si le plugin n'a pas fini
   if (!isAuth.value) {
     try {
       const me = await get('/me', {}, true)

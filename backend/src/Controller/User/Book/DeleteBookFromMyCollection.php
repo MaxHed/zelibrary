@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Controller\User;
+namespace App\Controller\User\Book;
 
 use App\Entity\Book;
 use App\Entity\User;
@@ -11,7 +11,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 #[AsController]
-final class AddBookToMyCollection
+final class DeleteBookFromMyCollection
 {
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {
@@ -24,10 +24,10 @@ final class AddBookToMyCollection
             throw new NotFoundHttpException('Book not found');
         }
 
-        $user->addBooksCollection($bookEntity);
+        $user->removeBooksCollection($bookEntity);
         $this->entityManager->flush();
 
 
-        return new Response('Book added to my collection', Response::HTTP_OK);
+        return new Response('Book removed from my collection', Response::HTTP_OK);
     }
 }

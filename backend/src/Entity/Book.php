@@ -3,16 +3,24 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Delete;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BookRepository;
+use ApiPlatform\Metadata\ApiFilter;
+use App\State\Book\MyBooksProvider;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Serializer\Attribute\Groups;
-use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use Doctrine\Common\Collections\ArrayCollection;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\User\Book\GetMyBooksCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
+use App\Controller\User\Book\AddBookToMyCollection;
+use App\Controller\User\Book\DeleteBookFromMyCollection;
+use App\Controller\User\Book\IsBookInMyCollection;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 #[ApiResource(
@@ -26,6 +34,36 @@ use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
             name: 'api_book_get_one',
             normalizationContext: ['groups' => ['book:read']],
             uriTemplate: '/books/{id}',
+        ),
+        new Get(
+            name: 'api_user_is_book_in_my_collection',
+            uriTemplate: '/me/is-book-in-my-collection/{book}',
+            uriVariables: ['book' => new Link(fromClass: Book::class)],
+            controller: IsBookInMyCollection::class,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            read: false,
+        ),
+        new Post(
+            name: 'api_user_add_book_to_my_collection',
+            uriTemplate: '/me/add-book-to-my-collection/{book}',
+            uriVariables: ['book' => new Link(fromClass: Book::class)],
+            controller: AddBookToMyCollection::class,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            read: false,
+        ),
+
+        new Delete(
+            name: 'api_user_delete_book_from_my_collection',
+            uriTemplate: '/me/delete-book-from-my-collection/{book}',
+            uriVariables: ['book' => new Link(fromClass: Book::class)],
+            controller: DeleteBookFromMyCollection::class,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+        ),
+        new GetCollection(
+            uriTemplate: '/me/books-collection',
+            provider: MyBooksProvider::class,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            normalizationContext: ['groups' => ['book:read']],
         )
     ],
     paginationItemsPerPage: 12,
@@ -43,19 +81,19 @@ class Book
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['book:read', 'books:read', 'review:read'])]
+    #[Groups(['book:read', 'books:read', 'review:read', 'book-collection:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['book:read', 'books:read', 'review:read'])]
+    #[Groups(['book:read', 'books:read', 'review:read', 'book-collection:read'])]
     private ?string $title = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    #[Groups(['book:read', 'books:read', 'review:read'])]
+    #[Groups(['book:read', 'books:read', 'review:read', 'book-collection:read'])]
     private ?string $summary = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    #[Groups(['book:read', 'review:read'])]
+    #[Groups(['book:read', 'review:read', 'book-collection:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -63,12 +101,12 @@ class Book
 
     #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: 'books', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'book_author')]
-    #[Groups(['book:read', 'review:read' , 'books:read'])]
+    #[Groups(['book:read', 'review:read' , 'books:read', 'book-collection:read'])]
     private Collection $authors;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'books', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'book_category')]
-    #[Groups(['book:read', 'review:read' , 'books:read'])]
+    #[Groups(['book:read', 'review:read' , 'books:read', 'book-collection:read'])]
     private Collection $categories;
 
     /**

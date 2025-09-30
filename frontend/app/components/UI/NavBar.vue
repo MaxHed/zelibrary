@@ -38,7 +38,12 @@ const baseItems = [
     { to: '/books', label: 'Livres' },
 ]
 
-const items = computed(() => isAuth.value ? [...baseItems, { to: '/borrows', label: 'Mes emprunts' }] : baseItems)
+// si l'utilisateur est authentifié, on ajoute les items de base plus les items de connexion
+const items = computed(() => isAuth.value ? [
+    ...baseItems, // décomposer le tableau baseItems pour ajouter les items de connexion
+    { to: '/borrows', label: 'Mes emprunts' },
+    { to: '/collection', label: 'Ma collection' }
+] : baseItems)
 
 const isMenuOpen = ref(false)
 
