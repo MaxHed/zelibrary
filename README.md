@@ -31,7 +31,7 @@ php bin/console lexik:jwt:generate-keypair --overwrite
 ### Variables d’environnement
 Copiez le fichier d’exemple si nécessaire et ajustez vos paramètres (BDD, APP_ENV, etc.).
 ```bash
-cp .env .env.local
+cp .env.example .env.local
 ```
 
 ### Lancer le serveur de développement
