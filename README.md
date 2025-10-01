@@ -2,6 +2,14 @@
 
 Monorepo contenant un backend Symfony et un frontend Nuxt. Ce guide couvre l’installation, le lancement en local, et des conseils de dépannage. (Note: la prise en charge Docker a été retirée de ce guide. Je ne maîtrise pas assez Docker pour proposer un montage fiable, il est donc volontairement exclu.)
 
+### Temps passé sur le projet
+- Globalement 27h30 : 
+  - début Vendredi 26/09/2025 à 17:00 -> 23H
+  - Samedi 27/09/2025 à 09:00 -> 13:00
+  - Dimanche 28/09/2025 à 09:00 -> 11:00 & 18:00 -> 01:00
+  - Lundi 29/09/2025 à 18:00 -> 23:30
+  - Mardi 30/09/2025 à 17:00 -> 20:00 (Fin)
+
 ### Prérequis
 - **PHP** ≥ 8.2 avec **Composer**
 - **Symfony CLI** (recommandé pour le serveur local)
