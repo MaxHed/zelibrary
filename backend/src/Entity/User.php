@@ -76,6 +76,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read'])]
     private Collection $reviews;
 
+    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    private ?string $resetPasswordToken = null;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $resetPasswordTokenExpiresAt = null;
+
     public function __construct()
     {
         $this->booksCollection = new ArrayCollection();
@@ -226,5 +232,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getResetPasswordToken(): ?string
+    {
+        return $this->resetPasswordToken;
+    }
+
+    public function setResetPasswordToken(?string $resetPasswordToken): static
+    {
+        $this->resetPasswordToken = $resetPasswordToken;
+        return $this;
+    }
+
+    public function getResetPasswordTokenExpiresAt(): ?\DateTimeImmutable
+    {
+        return $this->resetPasswordTokenExpiresAt;
+    }
+
+    public function setResetPasswordTokenExpiresAt(?\DateTimeImmutable $resetPasswordTokenExpiresAt): static
+    {
+        $this->resetPasswordTokenExpiresAt = $resetPasswordTokenExpiresAt;
+        return $this;
+    }
+
+    public function isResetPasswordTokenValid(): bool
+    {
+        if (!$this->resetPasswordToken || !$this->resetPasswordTokenExpiresAt) {
+            return false;
+        }
+
+        return $this->resetPasswordTokenExpiresAt > new \DateTimeImmutable();
     }
 }

@@ -88,25 +88,8 @@ class UserController
         ], 201);
     }
 
-    #[Route('/api/reset-password', name: 'api_user_reset_password', methods: ['POST'])]
-    public function resetPassword(Request $request): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        
-        if (!isset($data['email']) || !isset($data['newPassword'])) {
-            return new JsonResponse(['error' => 'Email et nouveau mot de passe requis'], 400);
-        }
-
-        $user = $this->userRepository->findOneBy(['email' => $data['email']]);
-        if (!$user) {
-            return new JsonResponse(['error' => 'Aucun utilisateur trouvé avec cet email'], 404);
-        }
-
-        $user->setPassword($this->passwordHasher->hashPassword($user, $data['newPassword']));
-        $this->entityManager->flush();
-
-        return new JsonResponse([
-            'message' => 'Mot de passe réinitialisé avec succès'
-        ]);
-    }
+    /**
+     * ENDPOINT RETIRÉ : Faille de sécurité critique (reset password sans validation).
+     * Pour implémenter un vrai reset password, voir PasswordResetController.
+     */
 }
