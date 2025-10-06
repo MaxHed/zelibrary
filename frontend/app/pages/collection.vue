@@ -45,6 +45,11 @@
 import ResourceCollection from '@/components/ResourceCollection.vue'
 import { useApi } from "@/composable/useApi";
 
+// Protéger la route avec authentification
+definePageMeta({
+  middleware: 'auth'
+})
+
 const collectionRef = ref(null)
 const confirmationPopup = ref(false)
 const bookId = ref(null)

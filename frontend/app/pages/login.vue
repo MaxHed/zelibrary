@@ -62,7 +62,7 @@
 
 <script setup>
 import { useAuth } from '@/composable/useAuth'
-const { login, loading, isAuth } = useAuth()
+const { login, loading, isAuth, checkAuth } = useAuth()
 
 const form = reactive({
   email: '',
@@ -84,8 +84,11 @@ const handleLogin = async () => {
   }
 }
 
-// Rediriger si déjà connecté
-if (isAuth.value) {
-  await navigateTo('/')
-}
+// Vérifier l'authentification (au cas où le cookie existe déjà)
+onMounted(async () => {
+  await checkAuth()
+  if (isAuth.value) {
+    await navigateTo('/')
+  }
+})
 </script>
