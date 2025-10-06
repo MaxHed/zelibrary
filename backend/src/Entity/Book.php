@@ -12,15 +12,16 @@ use ApiPlatform\Metadata\ApiFilter;
 use App\State\Book\MyBooksProvider;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
+use App\Controller\Book\TestBookController;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use App\Controller\User\Book\GetMyBooksCollection;
+use App\Controller\User\Book\IsBookInMyCollection;
 use Symfony\Component\Serializer\Attribute\Groups;
 use App\Controller\User\Book\AddBookToMyCollection;
 use App\Controller\User\Book\DeleteBookFromMyCollection;
-use App\Controller\User\Book\IsBookInMyCollection;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 #[ApiResource(

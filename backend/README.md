@@ -47,6 +47,13 @@ Endpoints principaux
 - Utilisateurs
   - GET /api/me – Profil utilisateur courant (auth requis)
   - POST /api/register – Création de compte (email, password)
+- Authentification
+  - POST /api/login_check – Connexion (retourne cookie JWT)
+  - POST /api/logout – Déconnexion (supprime cookie)
+- Reset Password (SÉCURISÉ)
+  - POST /api/password-reset/request – Demande de reset (génère token)
+  - POST /api/password-reset/confirm – Confirmation avec token
+  - Voir `PASSWORD_RESET_GUIDE.md` pour les détails
 - Livres
   - GET /api/books – Liste paginée (recherche et tri activés)
   - GET /api/books/{id} – Détail d’un livre
@@ -65,9 +72,23 @@ Migrations & Fixtures
 - Fixtures: répertoire src/DataFixtures/ (dev/test)
 
 
+Tests Automatisés
+- **31 tests PHPUnit**, 58 assertions (100% de succès) ✅
+- Tests d'intégration API (authentification, collection, reviews)
+- Tests unitaires des Repositories personnalisés
+- **Pas d'IDs hardcodés** : utilisation des méthodes du Repository
+
+**Lancer les tests** :
+```bash
+cd backend
+php bin/phpunit --testdox
+```
+
+**Documentation complète** : `documentation/TESTS.md`
+
 Tests API/collection Postman (optionnel):
 - Fichier: tests/zelibrary.postman_collection.json
-- Importez la collection dans Postman et configurez l’URL de base.
+- Importez la collection dans Postman et configurez l'URL de base.
 
 Qualité & Conventions
 - declare(strict_types=1); sur les nouveaux fichiers.
@@ -79,6 +100,8 @@ Sécurité
 - Firewalls: login (json_login), api (stateless + jwt)
 - Extraction du JWT via cookie AUTH_TOKEN.
 - Pensez à activer HTTPS et SameSite=None en production.
+- **Reset password sécurisé** : système de token temporaire avec expiration
+- **⚠️ IMPORTANT** : Voir `SECURITY_FIXES.md` pour les correctifs appliqués
 
 Déploiement
 - Générer les clés JWT et variables d’environnement.
