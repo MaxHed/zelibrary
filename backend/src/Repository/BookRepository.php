@@ -37,4 +37,40 @@ class BookRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * Récupère tous les livres avec leurs relations authors et categories
+     * en une seule requête SQL (évite le problème N+1).
+     * 
+     * Utilise des LEFT JOIN avec addSelect() pour charger les relations
+     * de manière EAGER dans la même requête.
+     * 
+     * @param array<string, mixed> $filters Filtres optionnels (title, authors.name, categories.name)
+     * @return Book[]
+     */
+    public function findAllWithRelations(array $filters = []): array
+    {
+        $qb = $this->createQueryBuilder('b')
+            ->leftJoin('b.authors', 'a')->addSelect('a')
+            ->leftJoin('b.categories', 'c')->addSelect('c')
+            ->orderBy('b.createdAt', 'DESC');
+
+        // Appliquer les filtres si présents
+        if (isset($filters['title'])) {
+            $qb->andWhere('b.title LIKE :title')
+               ->setParameter('title', '%' . $filters['title'] . '%');
+        }
+
+        if (isset($filters['authors.name'])) {
+            $qb->andWhere('a.name LIKE :authorName')
+               ->setParameter('authorName', '%' . $filters['authors.name'] . '%');
+        }
+
+        if (isset($filters['categories.name'])) {
+            $qb->andWhere('c.name LIKE :categoryName')
+               ->setParameter('categoryName', '%' . $filters['categories.name'] . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

@@ -33,6 +33,24 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * Récupère un utilisateur avec sa collection de livres
+     * et les relations (authors, categories) chargées (EAGER).
+     * 
+     * Évite le problème N+1 lors de la sérialisation.
+     */
+    public function findOneWithBooksAndRelations(int $userId): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.booksCollection', 'b')->addSelect('b')
+            ->leftJoin('b.authors', 'a')->addSelect('a')
+            ->leftJoin('b.categories', 'c')->addSelect('c')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

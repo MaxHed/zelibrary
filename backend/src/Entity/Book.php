@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\BookRepository;
 use ApiPlatform\Metadata\ApiFilter;
 use App\State\Book\MyBooksProvider;
+use App\State\Book\BooksCollectionProvider;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use App\Controller\Book\TestBookController;
@@ -30,6 +31,7 @@ use App\Controller\User\Book\DeleteBookFromMyCollection;
             name: 'api_book_get_collection',
             normalizationContext: ['groups' => ['books:read']],
             uriTemplate: '/books',
+            provider: BooksCollectionProvider::class,
         ),
         new Get(
             name: 'api_book_get_one',
